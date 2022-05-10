@@ -14,12 +14,12 @@ async def root():
     return {"message": "Welcome to my iris API"}
 
 
-@app.get("/iris/data")
+@app.get("/data")
 async def get_data():
     return {"data": iris.data.tolist(), "target": iris.target.tolist()}
 
 
-@app.get("/iris/pred")
+@app.get("/pred")
 async def get_prediction(sepal_length, sepal_width, petal_length, petal_width):
     pred = int(
         model.predict([[sepal_length, sepal_width, petal_length, petal_width]])[0]
