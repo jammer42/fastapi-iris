@@ -1,0 +1,28 @@
+import joblib
+from sklearn import datasets
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+iris = datasets.load_iris()
+model = joblib.load("model.joblib")
+
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to my iris API"}
+
+
+@app.get("/iris/data")
+async def get_data():
+    return {"data": iris.data.tolist(), "target": iris.target.tolist()}
+
+
+@app.get("/iris/pred")
+async def get_prediction(sepal_length, sepal_width, petal_length, petal_width):
+    pred = int(
+        model.predict([[sepal_length, sepal_width, petal_length, petal_width]])[0]
+    )
+    pred_class = iris.target_names[pred]
+    return {"class": pred, "class name": pred_class}
